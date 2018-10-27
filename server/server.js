@@ -88,12 +88,48 @@ app.delete('/todos/:id',(req,res) => {
       return res.status(404).send();   //we don't send the e error  as it may contain private information
     }
 
-    res.send(todo);
+    res.send({todo});
   }).catch((e) => {
     res.status(400).send();
   });
 
 })
+
+//for PATCH we will install the lodash npm module
+//node-todo-api$ npm i lodash@4.15.0 --save
+const _ = require('lodash');
+app.patch('/todos/:id',(req,res) => {
+  var id = req.params.id;   //req.params is an object that now has id as property and its value whatever we passed i  the url
+  var body = _.pick(req.body,['text','completed']);   //pick takes an object and an array of properties that you pull off if these exist crrateing a new object with these properties
+
+  if (!ObjectID.isValid(id)) {
+    return res.status(404).send();   //we don't send the e error  as it may contain private information
+  };
+
+  if (_.isBoolean(body.completed) && body.completed) {
+    body.completedAt = new Date().getTime();
+  } else {
+    body.completed = false;
+    body.completedAt = null;    //by setting it to null it is like removing the value from a database
+  }
+
+  //similar mongodbfindOneAndUpdate  remind yourself the set filters etc. from mongodb
+  Todo.findByIdAndUpdate(id,{$set: body},{new: true}).then((todo) => {
+    if (!todo) {
+      return res.status(404).send();   //we don't send the e error  as it may contain private information
+    }
+
+    res.send({todo});
+  }).catch((e) => {
+    res.status(400).send();
+  });
+
+
+});
+
+
+/*ONE THING TO KEEP IN MIND IS THAT IN THEORY FROM ANY ROUTE YOU COULD ASK TO DO ANYTHING I.E. FROM A DELETE ROUT YOU COULD POST AND VICE VERSA
+BUT WE ARE USING THESE INDUSTRY STANDARDS WHERE YOU POST/GET/DELETE/PATCH */
 
 
 //In Mongoose Todo.insertMany(todosExample) where todos is an array of object as the model expects
