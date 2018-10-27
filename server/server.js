@@ -75,7 +75,25 @@ app.get('/todos/:id',(req,res) => {  //id will be the name of the varible
 })
 //this is used on tests only but if you create var someID = new ObjectID() then someID.toHexString() make it a string
 
+//Deleting a document  HERE ANGELOS
+app.delete('/todos/:id',(req,res) => {
+  var id = req.params.id;   //req.params is an object that now has id as property and its value whatever we passed i  the url
 
+  if (!ObjectID.isValid(id)) {
+    return res.status(404).send();   //we don't send the e error  as it may contain private information
+  };
+
+  Todo.findByIdAndRemove(id).then((todo) => {
+    if (!todo) {
+      return res.status(404).send();   //we don't send the e error  as it may contain private information
+    }
+
+    res.send(todo);
+  }).catch((e) => {
+    res.status(400).send();
+  });
+
+})
 
 
 //In Mongoose Todo.insertMany(todosExample) where todos is an array of object as the model expects

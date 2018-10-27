@@ -1,8 +1,6 @@
 const {mongoose} = require('./../server/db/mongoose');
 const {Todo} = require('./../server/models/todo');
 
-
-
 //get the id of one of the database document so that we can use it as an example
 const id = '5bcba1062e5c32dd5ca1ba7a';  //don't worry about this not beign an ObjectID type but a string
 //mongoose takes care all of that by converting the above string to an ObjectID
@@ -11,7 +9,6 @@ const {ObjectID} = require('mongodb'); //this is only use in for validating the 
 if (!ObjectID.isValid(id)) {
   console.log('id is not of valid ObjectID type');
 };
-
 
 
 Todo.find({
