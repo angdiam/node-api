@@ -1,3 +1,5 @@
+require('./config/config');
+
 let {mongoose} = require('./db/mongoose');
 let {Todo} = require('./models/todo');
 let {User} = require('./models/user');
@@ -8,7 +10,9 @@ let bodyParser = require('body-parser');
 
 
 let app = express();
-const port = process.env.PORT || 3000;
+// const port = process.env.PORT || 3000;
+const port = process.env.PORT;
+
 
 app.use(bodyParser.json()); //set middleware for express to use This bodyParser.join() function
 //will take the body from the client that is in JSON format and make it an object and attach it in the req object
